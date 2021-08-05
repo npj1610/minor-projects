@@ -1,13 +1,16 @@
 import notes_graphical
 import notes_input
 import notes_core
+
+from notes_core import Note
 from notes_core import noteToPos
+
 import time
 
 clef = "fa"
 limits = {
-    "min" : notes_core.Note("do", 3),
-    "max" : notes_core.Note("do", 6),
+    "min" : Note("do", 3),
+    "max" : Note("do", 6),
 }
 def main():
     notes_graphical.startWindow("visual memory notes")
@@ -22,7 +25,7 @@ def main():
         note = notes_input.inputToNote(notes_graphical.win.checkKey())
         pos = None
         if note is not None:
-            pos = notes_core.noteToPos(note, clef)
+            pos = noteToPos(note, clef)
             if pos < noteToPos(limits["min"], clef) or noteToPos(limits["max"], clef) < pos:
                 pos = None
         notes_graphical.showNote(pos)
