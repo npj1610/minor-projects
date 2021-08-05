@@ -1,6 +1,8 @@
 import graphics
 
 win = None
+treble_clef = None
+bass_clef = None
 
 staff_x = 200
 staff_y = 200
@@ -38,15 +40,18 @@ def drawLine(line, clean = False, memory = []):
         memory.append(line)
 
 def showNote(pos, memory = []):
-    # pos 0 = under first line
-    # pos 1 = in first line
-    if pos < -10 or 20 < pos:
+    # draw no note
+    if pos is None:
         return
     # cleans previous note
     for obj in memory:
         obj.undraw()
     memory.clear()
     drawLine(None, clean = True)
+    # pos 0 = under first line
+    # pos 1 = in first line
+    if pos < -10 or 20 < pos:
+        return
     
     note_anchor_point = getNoteAnchorPoint(pos)
     note = graphics.Image(note_anchor_point, "pics/note.png")
@@ -66,8 +71,21 @@ def showNote(pos, memory = []):
             else:
                 drawLine(line)
 
+def drawSolClef():
+    bass_clef.undraw()
+    treble_clef.undraw()
+    treble_clef.draw(win)
+
+def drawFaClef():
+    treble_clef.undraw()
+    bass_clef.undraw()
+    bass_clef.draw(win)
+
 def startWindow(title):
     global win
+    global treble_clef
+    global bass_clef
+    
     win = graphics.GraphWin(title,
                                 staff_x + 2*border_size,
                                 staff_y + 2*extra_y + 2*border_size
@@ -77,4 +95,3 @@ def startWindow(title):
     bass_clef = graphics.Image(staff_anchor_point, "pics/fa.png")
     
     staff.draw(win)
-    bass_clef.draw(win)
