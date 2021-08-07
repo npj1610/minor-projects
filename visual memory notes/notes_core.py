@@ -35,6 +35,9 @@ class Note:
     def __repr__(self):
         return Note.notes[self.note]+str(self.octave+4)
 
+    def __eq__(self, other):
+        return self.note == other.note and self.octave == other.octave
+
 clefs = {"sol" : (3, Note("sol", 4)), "fa" : (7, Note("fa", 3)) }
 
 def noteToPos(note, clef):
@@ -46,7 +49,3 @@ def posToNote(pos, clef):
     base_pos = clefs[clef][0]
     base_note = clefs[clef][1]
     return base_note + (pos - base_pos)
-    
-
-print(noteToPos(Note("do"), "sol"))
-print(noteToPos(Note("do"), "fa"))
