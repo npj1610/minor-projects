@@ -22,6 +22,10 @@ note_0_start_y = staff_start_y + 150 - 2
 note_x = 38
 note_y = 26
 
+pos_space = 10
+higher_pos = 11 + pos_space
+lower_pos = -1 - pos_space
+
 def getAnchorPoint(start_x, start_y, size_x, size_y):
     return graphics.Point(start_x + size_x/2, start_y + size_y/2)
 
@@ -34,12 +38,12 @@ def getNoteAnchorPoint(pos):
     return graphics.Point(note_0_anchor_point.x, note_0_anchor_point.y-12*pos)
 
 
-def drawText(text=None, color=None, memory = []):
+def drawText(text=None, color="black", memory = []):
     for obj in memory:
         obj.undraw()
     memory.clear()
 
-    if color is not None:
+    if text is not None:
         text = graphics.Text(text_anchor_point, text)
         text.setTextColor(color)
         text.setStyle("bold")
@@ -79,13 +83,13 @@ def showNote(pos, memory = []):
     memory.append(note)
     
     if pos < 0:
-        for line in range(-1, -11, -2):
+        for line in range(-1, lower_pos, -2):
             if line < pos:
                 break
             else:
                 drawLine(line)
     elif 10 < pos:
-        for line in range(11, 21, 2):
+        for line in range(11, higher_pos, 2):
             if pos < line:
                 break
             else:

@@ -23,3 +23,21 @@ def inputToNote(input):
         return keyboard_dict[input]
     except KeyError:
         return None
+
+def askQuestion(question, answers):
+    options = "( "
+    for i in range(len(answers)):
+        if i != 0:
+            options += ", "
+        options += str(i) + "->" + str(answers[i])
+    options += " )"
+        
+    while True:
+        print(question+" "+options)
+        try:
+            i = int(input())
+            if i < 0:
+                raise IndexError
+            return answers[i]
+        except (IndexError, ValueError):
+            print("Invalid answer, try again")
