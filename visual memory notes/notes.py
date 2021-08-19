@@ -1,3 +1,6 @@
+#importing graphics.py causes windows to unselect the terminal
+#idk what to do about it
+import notes_graphical
 import notes_input
 
 from notes_core import clefs
@@ -24,15 +27,13 @@ def main():
                                                 [Note("do", 5), Note("do", 6), Note("do", 7)]
                                             )
         
-    reaction_time = notes_input.askQuestion("Select a reaction time",
-                                                    [0.7, 1, 1.5]
-                                                )
+    reaction_time = notes_input.askQuestion("Select a reaction time", [0.7, 1, 1.5])
+    input_mode = notes_input.askQuestion("Select an input mode", notes_input.modes)
 
 
     # Importing graphical causes to unselect the terminal
     # this bodge avoids the need of clicking before answering the questions
     # i hate it but I can't do it better
-    import notes_graphical
 
     if noteToPos(limit_min, clef) < notes_graphical.lower_pos:
         limit_min = posToNote(notes_graphical.lower_pos, clef)
@@ -72,7 +73,7 @@ def main():
             
             time.sleep(reaction_time)
 
-            read_note = notes_input.inputToNote(notes_graphical.win.checkKey())
+            read_note = notes_input.non_block_input(input_mode)
             if read_note is None:
                 notes_graphical.drawText("NOT ANSWERED, ANSWER: "+str(correct_note), "orange")
                 not_answered += 1
@@ -87,7 +88,8 @@ def main():
             # cleans output text
             notes_graphical.deleteText()
             # cleans input buffer
-            notes_graphical.win.checkKey()
+            if input_mode == notes_input.modes[0]:
+                notes_graphical.win.checkKey()
             
     except:
         print("CORRECT      : "+str(correct))
@@ -95,6 +97,7 @@ def main():
         print("NOT ANSWERED : "+str(not_answered))
         print("TOTAL        : "+str(correct+incorrect+not_answered))
         #to debug: traceback.print_exc()
+        notes_input.midi_in_port.close()
         
 
 if __name__ == "__main__":

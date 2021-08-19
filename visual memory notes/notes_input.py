@@ -1,5 +1,7 @@
 import notes_core
+import notes_graphical
 
+import mido
 
 keyboard_dict = {}
 octaves_lists = [
@@ -41,3 +43,26 @@ def askQuestion(question, answers):
             return answers[i]
         except (IndexError, ValueError):
             print("Invalid answer, try again")
+
+midi_in_port = mido.open_input()
+
+def midiToNote():
+    final = None
+    for msg in midi_in_port.iter_pending():
+        if msg.type == 'note_on':
+            final = msg
+    
+    if final is None:
+        return None
+    else:
+        return notes_core.midiToNote(final.note)
+
+modes = ["computer keyboard", "midi keyboard"]
+
+def non_block_input(mode):
+    if mode == modes[0]:
+        return inputToNote(notes_graphical.win.checkKey())
+    elif mode == modes[1]:
+        return midiToNote()
+    else:
+        return None
